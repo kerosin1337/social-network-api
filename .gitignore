@@ -1,0 +1,7 @@
+.idea
+.env
+
+access.log
+debug.log
+
+node_modules
