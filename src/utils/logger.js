@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
 import log4js from "log4js";
 
 const LOG_PATH = process.env.LOG_PATH || ".";

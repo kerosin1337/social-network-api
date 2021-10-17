@@ -1,6 +1,7 @@
 .idea
 .env
 
+logs
 access.log
 debug.log
 
