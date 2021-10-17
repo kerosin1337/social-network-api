@@ -35,7 +35,6 @@ export const auth = (strategy) =>
             }
             const { password, ...rest } = user.toJSON();
             req.user = rest;
-            req.basicUser = user;
             return next(); // continue to next middleware if no error.
         })(req, res, next);
 

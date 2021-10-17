@@ -15,6 +15,12 @@ export class UserService{
         await user.save();
         return user;
     }
+
+    async getUserById(id, relations = []){
+        const query = User.findById(id);
+        relations.forEach(rel => query.populate(rel))
+        return query;
+    }
 }
 
 export class AuthService{

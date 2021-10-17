@@ -23,7 +23,7 @@ class PostsController {
     }
 
     async getMyPosts(req, res){
-        const posts = await this.postsService.getPostsByAuthor(req.basicUser);
+        const {posts} = await this.postsService.getPostsByAuthor(req.user._id);
         return res.status(200).json(posts)
     }
 
