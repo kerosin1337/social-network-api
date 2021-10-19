@@ -15,7 +15,10 @@ export class MessagesService {
         })
         return message;
     }
-
+    async getMessageById(id) {
+        const message = await Message.findById(id);
+        return message;
+    }
     // async create(body, author){
     //     const post = await Message.create({
     //         ...body,

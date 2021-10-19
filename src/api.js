@@ -30,4 +30,6 @@ router.get("/posts", auth('jwt'),
     (req, res) => PostsController.getAllPosts(req, res));
 router.post("/messages", [auth('jwt'), validator(CreateMessageDto)],
     (req, res) => MessagesController.create(req, res));
+router.get("/message/:id", auth('jwt'),
+    (req, res) => MessagesController.getMessage(req, res));
 export default router;
