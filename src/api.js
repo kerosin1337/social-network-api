@@ -4,8 +4,10 @@ import validator from "./utils/validator.js";
 import CreateUserDto from './modules/users/dto/create-user.dto.js';
 import LoginUserDto from './modules/users/dto/login-user.dto.js';
 import CreatePostDto from './modules/posts/dto/create-post.dto.js';
+import CreateMessageDto from './modules/messages/dto/create-message.dto.js';
 import {auth} from "./utils/auth.js";
 import PostsController from "./modules/posts/posts.controller.js";
+import MessagesController from "./modules/messages/messages.controller.js";
 
 const router = new express.Router();
 
@@ -26,4 +28,6 @@ router.post("/posts", [auth('jwt'), validator(CreatePostDto)],
 
 router.get("/posts", auth('jwt'),
     (req, res) => PostsController.getAllPosts(req, res));
+router.post("/messages", [auth('jwt'), validator(CreateMessageDto)],
+    (req, res) => MessagesController.create(req, res));
 export default router;
