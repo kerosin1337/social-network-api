@@ -4,6 +4,7 @@ import validator from "./utils/validator.js";
 import CreateUserDto from './modules/users/dto/create-user.dto.js';
 import LoginUserDto from './modules/users/dto/login-user.dto.js';
 import CreatePostDto from './modules/posts/dto/create-post.dto.js';
+import CreateDialogDto from './modules/messages/dto/create-dialog.dto.js';
 import CreateMessageDto from './modules/messages/dto/create-message.dto.js';
 import {auth} from "./utils/auth.js";
 import PostsController from "./modules/posts/posts.controller.js";
@@ -28,8 +29,10 @@ router.post("/posts", [auth('jwt'), validator(CreatePostDto)],
 
 router.get("/posts", auth('jwt'),
     (req, res) => PostsController.getAllPosts(req, res));
-router.post("/messages", [auth('jwt'), validator(CreateMessageDto)],
+router.post("/dialog", [auth('jwt'), validator(CreateDialogDto)],
     (req, res) => MessagesController.create(req, res));
 router.get("/message/:id", auth('jwt'),
     (req, res) => MessagesController.getMessage(req, res));
+router.post("/message/:id", [auth('jwt'), validator(CreateMessageDto)],
+    (req, res) => MessagesController.addMessage(req, res));
 export default router;

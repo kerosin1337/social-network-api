@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import UserSchema from "../users/users.entity";
 
 const MessageSchema = new mongoose.Schema({
     // title: String,
@@ -34,10 +33,16 @@ const MessageSchema = new mongoose.Schema({
 })
 
 const DialogSchema = new mongoose.Schema({
-    users: [UserSchema],
+    users: [{
+        user_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        }
+    }],
     messages: [MessageSchema]
 }, {
     timestamps: false
 })
 
-export default mongoose.model('Message', MessageSchema);
+export default mongoose.model('Dialog', DialogSchema);

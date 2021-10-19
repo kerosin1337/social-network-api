@@ -1,6 +1,7 @@
 import Message from './messages.entity.js';
 import {Service} from "../../utils/decorators.js";
 import {UserService} from "../users/users.services.js";
+import DialogSchema from "./messages.entity.js";
 
 export class MessagesService {
 
@@ -9,16 +10,30 @@ export class MessagesService {
     }
 
     async create(body, user) {
-        const message = await Message.create({
-            ...body,
-            from_id: user._id
+        const dialog = await DialogSchema.create({
+            users: [
+                ...body.users,
+                {user_id: user._id}
+            ],
+            messages: [
+                ...body.messages,
+            ]
         })
-        return message;
+        return dialog;
     }
+
+    async addMessageById(id, body) {
+        const dialog = await DialogSchema.findById(id);
+        dialog.messages.push(body);
+        dialog.save();
+        return dialog;
+    }
+
     async getMessageById(id) {
-        const message = await Message.findById(id);
+        const message = await DialogSchema.findById(id);
         return message;
     }
+
     // async create(body, author){
     //     const post = await Message.create({
     //         ...body,

@@ -21,6 +21,14 @@ class MessagesController {
             body: message
         });
     }
+
+    async addMessage(req, res) {
+        const message = await this.messagesService.addMessageById(req.params.id, req.body);
+
+        return res.json({
+            body: message
+        });
+    }
 }
 
 export default Controller(MessagesController);
