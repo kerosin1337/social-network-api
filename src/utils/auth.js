@@ -19,7 +19,7 @@ export const jwtStrategy = new JwtStrategy(configs, (payload, done) => {
 
 export const generateJwtToken = (payload, secret = process.env.ACCESS_TOKEN_SECRET, options) => {
     options = {
-        expiresIn: '30m',
+        expiresIn: '300m',
         ...options
     }
     return jwt.sign(payload, secret, options);

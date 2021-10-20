@@ -13,7 +13,8 @@ const schema = Joi.object({
             user_id: Joi.string(),
             body: Joi.string().required(),
         })),
-    }))
+    })),
+    type: Joi.string().valid('dialog', 'peers')
 
     // description: Joi.string().required(),
     // points: Joi.array().items(Joi.object({

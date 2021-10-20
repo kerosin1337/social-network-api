@@ -23,15 +23,49 @@ export class MessagesService {
     }
 
     async addMessageById(id, body) {
-        const dialog = await DialogSchema.findById(id);
+        const dialog = await DialogSchema.findById(id).populate('messages');
+        const {fwd_messages} = body;
+        if (fwd_messages) {
+            fwd_messages.forEach((value, id) => {
+                fwd_messages[id] = dialog.messages.find((messages) => messages._id == value);
+            })
+        }
         dialog.messages.push(body);
         dialog.save();
         return dialog;
     }
 
+    async deleteMessageById(id, body, user) {
+        const dialog = await DialogSchema.findById(id).populate('messages')
+        if (body.force) {
+            const deleteMessage = dialog.messages.find((message) => message._id.toString() === body.id && user._id.toString() === message.from_id.toString());
+            const idx = dialog.messages.indexOf(deleteMessage);
+            console.log(idx)
+            if (idx !== -1) {
+                dialog.messages.splice(idx, 1)
+            }
+        } else {
+            const deleteMessage = dialog.messages.find((message) => message._id.toString() === body.id)
+            deleteMessage.is_visible = false;
+        }
+        dialog.save()
+        return dialog
+    }
+
     async getMessageById(id) {
         const message = await DialogSchema.findById(id);
         return message;
+    }
+
+    async getDialogsByUser(req) {
+        const dialogs = await DialogSchema.find({
+            users: {
+                $elemMatch: {
+                    user_id: req.user._id
+                }
+            }
+        }).exec();
+        return dialogs;
     }
 
     // async create(body, author){

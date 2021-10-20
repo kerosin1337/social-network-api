@@ -29,6 +29,21 @@ class MessagesController {
             body: message
         });
     }
+
+    async getDialogs(req, res) {
+        const dialogs = await this.messagesService.getDialogsByUser(req);
+        return res.json({
+            body: dialogs
+        })
+    }
+
+    async deleteDialogs(req, res) {
+        await this.messagesService.deleteMessageById(req.params.id, req.body, req.user)
+
+        return res.json({
+            massage: 'Deleted'
+        })
+    }
 }
 
 export default Controller(MessagesController);

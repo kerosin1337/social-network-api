@@ -6,10 +6,12 @@ const schema = Joi.object({
     read_state: Joi.number(),
     to_id: Joi.string().required(),
     from_id: Joi.string().required(),
-    fwd_messages: Joi.array().items(Joi.object({
-        user_id: Joi.string(),
-        body: Joi.string().required(),
-    })),
+    // fwd_messages: Joi.array().items(Joi.object({
+    //     user_id: Joi.string(),
+    //     body: Joi.string().required(),
+    //     date: Joi.date()
+    // })),
+    fwd_messages: Joi.array().items(Joi.string().default([null]))
 
 
     // description: Joi.string().required(),

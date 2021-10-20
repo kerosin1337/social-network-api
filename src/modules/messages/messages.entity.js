@@ -24,8 +24,20 @@ const MessageSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    is_visible: {
+        type: Boolean,
+        default: true
+    },
     fwd_messages: {
-        type: [Object],
+        type: [{
+            from_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                required: true
+            },
+            body: String,
+            date: Date
+        }],
         default: null
     }
 }, {
@@ -40,7 +52,12 @@ const DialogSchema = new mongoose.Schema({
             required: true
         }
     }],
-    messages: [MessageSchema]
+    messages: [MessageSchema],
+    type: {
+        type: String,
+        default: 'dialog',
+        required: true
+    }
 }, {
     timestamps: false
 })
