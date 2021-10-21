@@ -13,7 +13,7 @@ export class MessagesService {
         const dialog = await DialogSchema.create({
             users: [
                 ...body.users,
-                {user_id: user._id}
+                user._id
             ],
             messages: [
                 ...body.messages,
@@ -23,11 +23,11 @@ export class MessagesService {
     }
 
     async addMessageById(id, body) {
-        const dialog = await DialogSchema.findById(id).populate('messages');
+        const dialog = await DialogSchema.findById(id);
         const {fwd_messages} = body;
         if (fwd_messages) {
             fwd_messages.forEach((value, id) => {
-                fwd_messages[id] = dialog.messages.find((messages) => messages._id == value);
+                fwd_messages[id] = dialog.messages.find((messages) => messages.id.toString() === value);
             })
         }
         dialog.messages.push(body);
@@ -36,11 +36,10 @@ export class MessagesService {
     }
 
     async deleteMessageById(id, body, user) {
-        const dialog = await DialogSchema.findById(id).populate('messages')
+        const dialog = await DialogSchema.findById(id)
         if (body.force) {
             const deleteMessage = dialog.messages.find((message) => message._id.toString() === body.id && user._id.toString() === message.from_id.toString());
             const idx = dialog.messages.indexOf(deleteMessage);
-            console.log(idx)
             if (idx !== -1) {
                 dialog.messages.splice(idx, 1)
             }
@@ -59,12 +58,8 @@ export class MessagesService {
 
     async getDialogsByUser(req) {
         const dialogs = await DialogSchema.find({
-            users: {
-                $elemMatch: {
-                    user_id: req.user._id
-                }
-            }
-        }).exec();
+            users: req.user._id
+        }).populate('users', ['name']).exec();
         return dialogs;
     }
 

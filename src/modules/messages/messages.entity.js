@@ -46,11 +46,9 @@ const MessageSchema = new mongoose.Schema({
 
 const DialogSchema = new mongoose.Schema({
     users: [{
-        user_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }],
     messages: [MessageSchema],
     type: {

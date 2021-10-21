@@ -23,3 +23,4 @@ UserSchema.methods.validatePassword = function (password) {
 }
 
 export default mongoose.model('User', UserSchema);
+export {UserSchema};

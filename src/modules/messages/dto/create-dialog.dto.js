@@ -1,9 +1,7 @@
 import Joi from "joi";
 
 const schema = Joi.object({
-    users: Joi.array().items(Joi.object({
-        user_id: Joi.string()
-    })),
+    users: Joi.array(),
     messages: Joi.array().items(Joi.object({
         body: Joi.string().required(),
         read_state: Joi.number(),
