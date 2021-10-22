@@ -15,7 +15,7 @@ class MessagesController {
     }
 
     async getMessage(req, res) {
-        const message = await this.messagesService.getMessageById(req.params.id);
+        const message = await this.messagesService.getMessageById(req.params.id, req.user);
 
         return res.json({
             body: message
@@ -23,7 +23,7 @@ class MessagesController {
     }
 
     async addMessage(req, res) {
-        const message = await this.messagesService.addMessageById(req.params.id, req.body);
+        const message = await this.messagesService.addMessageById(req.params.id, req);
 
         return res.json({
             body: message

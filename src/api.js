@@ -30,8 +30,8 @@ router.post("/posts", [auth('jwt'), validator(CreatePostDto)],
 
 router.get("/posts", auth('jwt'),
     (req, res) => PostsController.getAllPosts(req, res));
-router.post("/dialog", [auth('jwt'), validator(CreateDialogDto)],
-    (req, res) => MessagesController.create(req, res));
+// router.post("/dialog", [auth('jwt'), validator(CreateDialogDto)],
+//     (req, res) => MessagesController.create(req, res));
 router.get("/message/:id", auth('jwt'),
     (req, res) => MessagesController.getMessage(req, res));
 router.post("/message/:id", [auth('jwt'), validator(CreateMessageDto)],

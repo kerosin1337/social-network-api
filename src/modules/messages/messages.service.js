@@ -9,34 +9,65 @@ export class MessagesService {
         this.userService = Service(UserService);
     }
 
-    async create(body, user) {
-        const dialog = await DialogSchema.create({
-            users: [
-                ...body.users,
-                user._id
-            ],
-            messages: [
-                ...body.messages,
-            ]
-        })
-        return dialog;
-    }
+    // async create(body, user) {
+    //     const dialog = await DialogSchema.create({
+    //         users: [
+    //             ...body.users,
+    //             user._id
+    //         ],
+    //         messages: [
+    //             ...body.messages,
+    //         ]
+    //     })
+    //     return dialog;
+    // }
 
-    async addMessageById(id, body) {
-        const dialog = await DialogSchema.findById(id);
-        const {fwd_messages} = body;
-        if (fwd_messages) {
-            fwd_messages.forEach((value, id) => {
-                fwd_messages[id] = dialog.messages.find((messages) => messages.id.toString() === value);
+    async addMessageById(user_id, request) {
+
+        try {
+            const dialog = await DialogSchema.findOne({
+                users: {
+                    $in: [
+                        request.user._id,
+                        user_id
+                    ]
+                },
+                type: 'dialog'
             })
+            const {fwd_messages} = request.body;
+            if (fwd_messages) {
+                fwd_messages.forEach((value, id) => {
+                    fwd_messages[id] = dialog.messages.find((messages) => messages.id.toString() === value);
+                })
+            }
+            dialog.messages.push(request.body);
+            dialog.save();
+            return dialog;
+        } catch (err) {
+            // console.log(err)
+            const dialog = await DialogSchema.create({
+                users: [
+                    user_id,
+                    request.user._id
+                ],
+                messages: [
+                    request.body
+                ]
+            })
+            return dialog;
         }
-        dialog.messages.push(body);
-        dialog.save();
-        return dialog;
     }
 
     async deleteMessageById(id, body, user) {
-        const dialog = await DialogSchema.findById(id)
+        const dialog = await DialogSchema.findOne({
+            users: {
+                $in: [
+                    user._id,
+                    id
+                ]
+            },
+            type: 'dialog'
+        })
         if (body.force) {
             const deleteMessage = dialog.messages.find((message) => message._id.toString() === body.id && user._id.toString() === message.from_id.toString());
             const idx = dialog.messages.indexOf(deleteMessage);
@@ -51,9 +82,17 @@ export class MessagesService {
         return dialog
     }
 
-    async getMessageById(id) {
-        const message = await DialogSchema.findById(id);
-        return message;
+    async getMessageById(id, user) {
+        const dialog = await DialogSchema.findOne({
+            users: {
+                $in: [
+                    user._id,
+                    id
+                ]
+            },
+            type: 'dialog'
+        })
+        return dialog;
     }
 
     async getDialogsByUser(req) {
